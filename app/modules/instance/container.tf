@@ -1,6 +1,6 @@
 # Resource: DB Server Instacne
 resource "aws_instance" "db_container" {
-  ami  = "ami-032598fcc7e9d1c7a"
+  ami           = "ami-032598fcc7e9d1c7a"
   instance_type = "t2.micro"
 
   tags = {
@@ -10,15 +10,15 @@ resource "aws_instance" "db_container" {
 
 # Resource: Web Server Instance
 resource "aws_instance" "ws_container" {
-  ami  = "ami-032598fcc7e9d1c7a"
+  ami           = "ami-032598fcc7e9d1c7a"
   instance_type = "t2.micro"
 
   connection {
-    type = "ssh"
-    user = "admin"
+    type        = "ssh"
+    user        = "admin"
   }
 
-  user_data = file("../../../files/server-script.sh")
+  user_data = file("../../modules/files/server-script.sh")
 
   tags = {
     Name = var.web-server_name
@@ -28,25 +28,11 @@ resource "aws_instance" "ws_container" {
 # Resource: Elastic IP
 resource "aws_eip" "ws_eip" {
   instance = aws_instance.ws_container.id
-  vpc = true
+  vpc      = true
 }
 
 
-output "ws-instance_id" {
-  value = aws_instance.ws_container.id
-}
 
-output "ws_output" {
-  value = aws_instance.ws_container.public_ip
-}
-
-output "db-instance_id" {
-  value = aws_instance.db_container.id
-}
-
-output "db_output" {
-  value = aws_instance.db_container.private_ip
-}
 
 // TODO:
 // 1. create a DB Server (ec2 instance with this title) and output the private IP
