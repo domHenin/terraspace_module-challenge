@@ -4,11 +4,25 @@ provider "aws" {
 }
 
 # Module: Web-Server
-module "ws_module" {
-  source   = "../../modules/instance"
-  database_name = "Database Server"
-  web-server_name = "Web-server"
+module "web-server_module" {
+  source   = "../../modules/web"
+  // web-server_name = "Web-server"
 }
+
+module "database_module" {
+  source = "../../modules/db"
+  // database_name = "Database Server"
+}
+
+
+output "PrivateIP" {
+  value = module.db_container.PrivateIP
+}
+
+output "PublicIP" {
+  value = module.ws_container.public_ip 
+}
+
 
 // output "ws-module_output" {
 //   value = module.ws_module.instance_id
@@ -16,11 +30,11 @@ module "ws_module" {
 
 
 # Module: Database Server
-module "db_module" {
-  source   = "../../modules/instance"
-  database_name = "Database Server"
-  web-server_name = "Web-server"
-}
+// module "db_module" {
+//   source   = "../../modules/instance"
+//   database_name = "Database Server"
+//   web-server_name = "Web-server"
+// }
 
 // output "db-module_output" {
 //   value = module.db_module.instance_id
