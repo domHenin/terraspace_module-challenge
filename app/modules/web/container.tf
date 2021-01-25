@@ -1,36 +1,37 @@
-# Resource: DB Server Instacne
-resource "aws_instance" "db_container" {
-  ami           = "ami-032598fcc7e9d1c7a"
-  instance_type = "t2.micro"
-
-  tags = {
-    Name = var.database_name
-  }
-}
-
 # Resource: Web Server Instance
 resource "aws_instance" "ws_container" {
-  ami           = "ami-032598fcc7e9d1c7a"
+  ami           = "ami-00eb20669e0990cb4"
   instance_type = "t2.micro"
+  security_groups = [module.sg.sg_name]
+
 
   connection {
     type        = "ssh"
     user        = "admin"
   }
 
+
   user_data = file("../../modules/files/server-script.sh")
 
+
   tags = {
-    Name = var.web-server_name
+    Name = "Web-Server"
   }
 }
 
-# Resource: Elastic IP
-resource "aws_eip" "ws_eip" {
-  instance = aws_instance.ws_container.id
-  vpc      = true
+output "publicIP" {
+  value = aws_eip.ws_eip.public_ip
 }
 
+module "eip" {
+  source = "../elastic-ip"
+  instance_id = aws_instance.ws_container.id
+}
+
+module "sg" {
+  source = "../security-group"
+
+}
 
 
 
