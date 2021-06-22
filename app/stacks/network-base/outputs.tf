@@ -1,6 +1,14 @@
-output "ws-instance_id" {
-  value = aws_instance.ws_container.id
+output "sg_name" {
+  value = aws_security_group.allow_http.name
 }
+
+output "sg_id" {
+  value = aws_security_group.allow_http.id
+}
+
+//output "ws-instance_id" {
+//  value = aws_instance.ws_container.id
+//}
 
 
 // output "public_ip" {
